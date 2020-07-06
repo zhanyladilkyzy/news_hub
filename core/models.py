@@ -50,7 +50,14 @@ class MainUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
 
+
     objects = MainUserManager()
+
+    def get_full_name(self):
+        return self.fullname
+
+    def __str__(self):
+        return self.username
 
 
 class Category(models.Model):
