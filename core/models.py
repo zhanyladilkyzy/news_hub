@@ -12,7 +12,7 @@ class MainUserManager(BaseUserManager):
             creates user with params
     """
 
-    def create_user(self, username, password=None, full_name=None, email=None):
+    def create_user(self, username, password=None, full_name=None):
         """
         Creates user
         :param username: username of user
@@ -25,7 +25,7 @@ class MainUserManager(BaseUserManager):
         """
         if not username:
             raise ValueError('User must have a username')
-        user = self.model(username=username, email=email, full_name=full_name)
+        user = self.model(username=username, full_name=full_name)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -53,9 +53,6 @@ class MainUser(AbstractBaseUser, PermissionsMixin):
 
     objects = MainUserManager()
 
-    def get_full_name(self):
-        return self.fullname
-
     def __str__(self):
         return self.username
 
@@ -63,6 +60,9 @@ class MainUser(AbstractBaseUser, PermissionsMixin):
 class Category(models.Model):
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=200)
+
+    def __str__(self):
+        return '{} {}'.format(self.title, self.description)
 
 class News(models.Model):
     title = models.CharField(max_length=200)
@@ -74,12 +74,21 @@ class News(models.Model):
         return '{} {}'.format(self.created.strftime('%d.%m.%Y %H:%M'))
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE)
     user = models.ForeignKey(MainUser, on_delete=models.CASCADE)
     feedback = models.CharField(max_length=500)
 
-class Likes(models.Model):
+    def __str__(self):
+        return '{} {}'.format(self.news, self.user, self.feedback)
+
+class Like(models.Model):
     news = models.ForeignKey(News, on_delete=models.CASCADE)
     user = models.ForeignKey(MainUser, on_delete=models.CASCADE)
     liked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '{} {}'.format(self.news, self.user, self.liked)
+
+    # метод возвращаюший количество лайков
+

@@ -6,9 +6,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 
-from .serializers import MainUserSerializer, MainUserSerializer2, \
-    NewsSerializer, CategorySerializer
-from .models import MainUser, Category, News
+from .serializers import MainUserSerializer, MainUserSerializer2, NewsSerializer, CategorySerializer, LikeSerializer, CommentSerializer
+from .models import MainUser, Category, News, Like, Comment
 from .token import get_token
 
 
@@ -31,24 +30,27 @@ def get_all_users(request):
     return Response(serializer.data)
 
 
-class NewsViewSet(viewsets.ModelViewSet):
-    queryset = News.objects.all()
-    serializer_class = NewsSerializer
-    permission_classes = (IsAuthenticated,)
-
-
 class NewsViewSet2(viewsets.ReadOnlyModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
 
-
-class NewsViewSet3(viewsets.GenericViewSet, mixins.CreateModelMixin,
-                  mixins.ListModelMixin):
-    queryset = News.objects.all()
-    serializer_class = NewsSerializer
 
     @action(methods=['GET'], detail=True)
     def get_news_by_id(self, request, pk):
         news = News.objects.get(id=pk)
         serializer = NewsSerializer(news)
         return Response(serializer.data)
+
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class LikeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+
+class CommentViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
