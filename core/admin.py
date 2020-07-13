@@ -9,11 +9,11 @@ from .models import MainUser, Category, News, Like, Comment
 
 admin.site.register(News)
 # admin.site.register(UserTest)
-@admin.register(News)
-class NewsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'author', 'text', 'publishing_date')
-    list_filter = ('title', 'publishing_date')
-    search_fields = ('title', 'publishing_date')
+# @admin.register(News)
+# class NewsAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'title', 'author', 'text', 'publishing_date')
+#     list_filter = ('title', 'publishing_date')
+#     search_fields = ('title', 'publishing_date')
 
 # if use User model from django
 # admin.site.unregister(User)
